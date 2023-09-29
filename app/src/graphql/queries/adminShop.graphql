@@ -1,0 +1,28 @@
+query AdminShop($shop: String!) {
+    getShop(options: { shop: $shop }) {
+        shop {
+            id
+            shop
+            scope
+            shopKey
+            email
+            completedOnboarding
+            companyName
+            companySize
+            managerName
+            productCategory
+            averageProductWeight
+            merchantPaysOffset
+            calculateOffset
+            flatRateOffsetAmount
+            createdAt
+            updatedAt
+            billingId
+            shopifyProductId
+            appEnabledOnStorefront
+            billingActive
+            completedInstallation
+            previewMode
+        }
+    }
+}

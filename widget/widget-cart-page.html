@@ -1,0 +1,245 @@
+<style>
+    .neutrl {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        font-size: 16px;
+        padding-bottom: 15px;
+    }
+
+    .neutrl.neutrl--inactive {
+        display: none;
+    }
+
+    .neutrl .neutrl__cta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .neutrl .neutrl__cta .neutrl__label {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        padding-left: 10px;
+    }
+
+    .neutrl .neutrl__cta .neutrl__label span {
+        padding-left: 5px;
+        display: flex;
+    }
+    .neutrl .neutrl__cta .neutrl__label span svg {
+        width: 75px;
+    }
+
+    .neutrl__accent {
+        color: #45b357;
+        font-weight: bold;
+    }
+</style>
+
+<div class="neutrl neutrl--inactive"></div>
+
+<script>
+    var cart = {{cart | json}}
+    var weight = cart.total_weight * 0.00220462
+    var API_URL = 'https://neutrl-api-stage-gkj7gtoloq-uc.a.run.app/api/v1/graphql'
+
+    var htmlTemplate1 = `<!-- Checkbox -->
+    <div class="neutrl__cta">
+      <input type="checkbox" name="neutrl_order" class="neutrl__checkbox" id="neutrl_order">
+      <label for="neutrl_order" class="neutrl__label">Make it <span aria-label="neutrl">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 575 145.27">
+          <defs>
+            <clipPath id="clip-path">
+              <path d="M0 0h575v145.27H0z" class="cls-1"/>
+            </clipPath>
+            <pattern id="Unnamed_Pattern_2" width="40.8" height="40.8" data-name="Unnamed Pattern 2" patternTransform="matrix(1.83 0 0 -1.83 -6030.93 23297.76)" patternUnits="userSpaceOnUse">
+              <path d="M0 0h40.8v40.8H0z" class="cls-1"/>
+              <path d="M0 0h40.8v40.8H0z" class="cls-2"/>
+            </pattern>
+            <style>
+              .cls-1{fill:none}.cls-2{fill:#00ea93}.cls-3{clip-path:url(#clip-path)}.cls-5{fill:#002217}
+            </style>
+          </defs>
+          <g id="Layer_2" data-name="Layer 2">
+            <g id="Layer_1-2" class="cls-3" data-name="Layer 1">
+              <g class="cls-3">
+                <path d="M155.59.92h-35.1l7.94 23.9H146a14.34 14.34 0 0114.35 14.34v81.29h-18.84l-20.69-62.09A84 84 0 0041.14.92H29.6A28.68 28.68 0 00.92 29.6v49.29a65.46 65.46 0 0065.46 65.46H100L77.35 76.44a28.69 28.69 0 00-27.21-19.61H47l21.22 63.62a43.35 43.35 0 01-43.4-43.36V24.82h15a63.81 63.81 0 0160.52 43.61l22.06 66.12a14.34 14.34 0 0013.6 9.8h19.62a28.68 28.68 0 0028.68-28.69V29.6A28.68 28.68 0 00155.59.92" class="cls-2"/>
+                <path fill="none" stroke="url(#Unnamed_Pattern_2)" stroke-miterlimit="10" stroke-width="1.83" d="M155.59.92h-35.1l7.94 23.9H146a14.34 14.34 0 0114.35 14.34v81.29h-18.84l-20.69-62.09A84 84 0 0041.14.92H29.6A28.68 28.68 0 00.92 29.6v49.29a65.46 65.46 0 0065.46 65.46H100L77.35 76.44a28.69 28.69 0 00-27.21-19.61H47l21.22 63.62a43.35 43.35 0 01-43.4-43.36V24.82h15a63.81 63.81 0 0160.52 43.61l22.06 66.12a14.34 14.34 0 0013.6 9.8h19.62a28.68 28.68 0 0028.68-28.69V29.6A28.68 28.68 0 00155.59.92z"/>
+                <path d="M226.35 24.86h19.88l43.12 71.13h.77l-1.03-27.63v-43.5h16.78v94.11h-20.01L243 48.1h-.77l.9 26.72v44.15h-16.78V24.86zM349.5 49.26c18.84 0 31.5 11.62 31.5 31.37a51.62 51.62 0 01-.52 7.74H333v3.75c0 9.42 6.72 15.62 16.66 15.62 8.13 0 14.07-4 15.88-9.81h15.88c-2.72 13.42-15.11 22.33-31.76 22.33-20.79 0-33.05-13.94-33.05-35.63 0-22.33 12.91-35.37 32.92-35.37M365 77.4v-1.81c0-8.39-6.33-13.94-15.75-13.94-9.68 0-16.27 5.81-16.27 14.46v1.29zM452 119h-13.95L436 106.45h-1.16c-3.87 8.38-11.75 13.81-22.59 13.81-14.84 0-22.85-10.07-22.85-26.6V50.55h16.14v40.79c0 10.59 4.77 15.75 13.29 15.75 10.59 0 17.17-8.52 17.17-20.52v-36h16zM502.2 63.59v-13h-13.95v-22l-15.85 5.27v16.7h-12.29v13h12.27v42.6c0 7.62 3.23 12.78 13 12.78h16.82v-12.75h-13.95v-42.6zM551 50.55v13h-21.3V119h-16V64.23c0-6.06 1.42-13.68 13.81-13.68zM559.12 23.57H575v95.4h-15.88z" class="cls-5"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </span></label>
+    </div>`
+    var htmlTemplate2 = `<!-- Checkbox -->
+    <div class="neutrl__cta">
+      <span for="neutrl_order" class="neutrl__label">Your order is <span aria-label="neutrl">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 575 145.27">
+          <defs>
+            <clipPath id="clip-path">
+              <path d="M0 0h575v145.27H0z" class="cls-1"/>
+            </clipPath>
+            <pattern id="Unnamed_Pattern_2" width="40.8" height="40.8" data-name="Unnamed Pattern 2" patternTransform="matrix(1.83 0 0 -1.83 -6030.93 23297.76)" patternUnits="userSpaceOnUse">
+              <path d="M0 0h40.8v40.8H0z" class="cls-1"/>
+              <path d="M0 0h40.8v40.8H0z" class="cls-2"/>
+            </pattern>
+            <style>
+              .cls-1{fill:none}.cls-2{fill:#00ea93}.cls-3{clip-path:url(#clip-path)}.cls-5{fill:#002217}
+            </style>
+          </defs>
+          <g id="Layer_2" data-name="Layer 2">
+            <g id="Layer_1-2" class="cls-3" data-name="Layer 1">
+              <g class="cls-3">
+                <path d="M155.59.92h-35.1l7.94 23.9H146a14.34 14.34 0 0114.35 14.34v81.29h-18.84l-20.69-62.09A84 84 0 0041.14.92H29.6A28.68 28.68 0 00.92 29.6v49.29a65.46 65.46 0 0065.46 65.46H100L77.35 76.44a28.69 28.69 0 00-27.21-19.61H47l21.22 63.62a43.35 43.35 0 01-43.4-43.36V24.82h15a63.81 63.81 0 0160.52 43.61l22.06 66.12a14.34 14.34 0 0013.6 9.8h19.62a28.68 28.68 0 0028.68-28.69V29.6A28.68 28.68 0 00155.59.92" class="cls-2"/>
+                <path fill="none" stroke="url(#Unnamed_Pattern_2)" stroke-miterlimit="10" stroke-width="1.83" d="M155.59.92h-35.1l7.94 23.9H146a14.34 14.34 0 0114.35 14.34v81.29h-18.84l-20.69-62.09A84 84 0 0041.14.92H29.6A28.68 28.68 0 00.92 29.6v49.29a65.46 65.46 0 0065.46 65.46H100L77.35 76.44a28.69 28.69 0 00-27.21-19.61H47l21.22 63.62a43.35 43.35 0 01-43.4-43.36V24.82h15a63.81 63.81 0 0160.52 43.61l22.06 66.12a14.34 14.34 0 0013.6 9.8h19.62a28.68 28.68 0 0028.68-28.69V29.6A28.68 28.68 0 00155.59.92z"/>
+                <path d="M226.35 24.86h19.88l43.12 71.13h.77l-1.03-27.63v-43.5h16.78v94.11h-20.01L243 48.1h-.77l.9 26.72v44.15h-16.78V24.86zM349.5 49.26c18.84 0 31.5 11.62 31.5 31.37a51.62 51.62 0 01-.52 7.74H333v3.75c0 9.42 6.72 15.62 16.66 15.62 8.13 0 14.07-4 15.88-9.81h15.88c-2.72 13.42-15.11 22.33-31.76 22.33-20.79 0-33.05-13.94-33.05-35.63 0-22.33 12.91-35.37 32.92-35.37M365 77.4v-1.81c0-8.39-6.33-13.94-15.75-13.94-9.68 0-16.27 5.81-16.27 14.46v1.29zM452 119h-13.95L436 106.45h-1.16c-3.87 8.38-11.75 13.81-22.59 13.81-14.84 0-22.85-10.07-22.85-26.6V50.55h16.14v40.79c0 10.59 4.77 15.75 13.29 15.75 10.59 0 17.17-8.52 17.17-20.52v-36h16zM502.2 63.59v-13h-13.95v-22l-15.85 5.27v16.7h-12.29v13h12.27v42.6c0 7.62 3.23 12.78 13 12.78h16.82v-12.75h-13.95v-42.6zM551 50.55v13h-21.3V119h-16V64.23c0-6.06 1.42-13.68 13.81-13.68zM559.12 23.57H575v95.4h-15.88z" class="cls-5"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </span></span>
+    </div>`
+
+    var offsetQuery = `query CalculateOffsetQuery($shop: String!,$weight: String!, $distance: String!) {
+        calculateOffset(options: {shop: $shop, weight: $weight, distance: $distance}) {
+          value
+          variantId
+          offsetWeight
+        }
+      }`
+        var shopQuery = `query Shop($shop: String!) {
+      getShop(options: { shop: $shop }) {
+        shop {
+          id
+          shop
+          merchantPaysOffset
+          calculateOffset
+          flatRateOffsetAmount
+          appEnabledOnStorefront
+        }
+      }
+    }
+    `
+
+    function calculateOffset() {
+      fetch(API_URL, {
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": JSON.stringify({
+          query: offsetQuery,
+          variables: {
+            shop: "{{ shop.permanent_domain }}",
+            weight: weight.toString(),
+            distance: "1250"
+          }
+        })
+      }).then(response => response.json()).then(data => {
+        var neutrlCta = document.querySelector('.neutrl .neutrl__cta')
+        var neutrlCheckbox = document.querySelector('.neutrl .neutrl__checkbox')
+        console.log('data', data)
+        neutrlCta.setAttribute('data-neutrl-variant', data.data.calculateOffset.variantId)
+        var isSubmitting = false;
+        neutrlCta.addEventListener('click', function(e) {
+          var neutrlCheckbox = document.querySelector('.neutrl .neutrl__checkbox')
+          var variantId = neutrlCta.getAttribute('data-neutrl-variant')
+          neutrlCheckbox.checked = true;
+          e.preventDefault();
+          e.stopPropagation();
+          var atcData = {
+            items: [
+              {
+                quantity: 1,
+                id: variantId
+              }
+            ]
+          }
+          if(!isSubmitting) {
+            	isSubmitting = true;
+             fetch('/cart/add.js', {
+              method: "POST",
+              credentials: 'same-origin',
+              headers: {
+                "Content-Type": 'application/json'
+              },
+              body: JSON.stringify(atcData)
+            }).then(() => window.location.reload())
+        	}
+        })
+      }).catch(error => {
+        console.error(error)
+      })
+    }
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query: shopQuery,
+        variables: {
+          shop: "{{ shop.permanent_domain }}"
+        }
+      })
+    }).then(response => response.json()).then(shopData => {
+      if(shopData.data.getShop.shop == null || typeof shopData.data.getShop.shop === 'undefined') {
+        return;
+      }
+      const shop = shopData.data.getShop.shop
+      if(shop.appEnabledOnStorefront) {
+        var neutrlContainer = document.querySelector('.neutrl');
+        if(!shop.merchantPaysOffset) {
+          neutrlContainer.innerHTML = htmlTemplate1
+        } else {
+          neutrlContainer.innerHTML = htmlTemplate2
+        }
+        document.querySelector('.neutrl').classList.remove('neutrl--inactive');
+      }
+
+      var hasOffsetItem = false;
+      var carbonNeutralItem = null;
+      {% for item in cart.items %}
+        {% if item.title contains "Carbon Neutral" %}
+          hasOffsetItem = true;
+          carbonNeutralItem = {{item.variant_id}}
+        {% endif %}
+      {% endfor %}
+
+      if(!hasOffsetItem) {
+        calculateOffset()
+
+        // TODO ajax cart handling
+        document.addEventListener('neutrl-cart-updated', function(e) {
+          console.log('cart updated', e)
+        })
+      } else {
+        var neutrlCheckbox = document.querySelector('.neutrl .neutrl__checkbox')
+        var neutrlCta = document.querySelector('.neutrl .neutrl__cta')
+
+        neutrlCheckbox.checked = true;
+        neutrlCta.addEventListener('click', function(e) {
+          e.preventDefault()
+          e.stopPropagation()
+          var cartUpdateData = {
+            updates: {
+              [carbonNeutralItem]: 0
+            }
+          }
+          fetch('/cart/update.js', {
+            method: "POSt",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(cartUpdateData)
+          }).then(() => window.location.reload())
+        })
+      }
+    })
+</script>

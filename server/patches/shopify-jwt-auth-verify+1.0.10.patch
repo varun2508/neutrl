@@ -1,0 +1,21 @@
+diff --git a/node_modules/shopify-jwt-auth-verify/dist/index.d.ts b/node_modules/shopify-jwt-auth-verify/dist/index.d.ts
+index 6615b14..334ea64 100644
+--- a/node_modules/shopify-jwt-auth-verify/dist/index.d.ts
++++ b/node_modules/shopify-jwt-auth-verify/dist/index.d.ts
+@@ -1,3 +1,15 @@
+-import type { TIsVerified } from './index.d';
++export type TIsVerified = (authorization: string, secret: string, callback?: Function) => boolean
++export type TUtils = (a: string) => string
++export type TB64UrlEncode = (a: Buffer) => string
++export interface IPayload{
++  iss: string;
++  dest: string;
++  aud: string;
++  sub: string;
++  exp: number;
++  nbf: number;
++  iat: number;
++  jti: string; 
++}
+ declare const isVerified: TIsVerified;
+ export default isVerified;

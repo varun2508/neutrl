@@ -1,0 +1,9 @@
+query CalculateOffset($shop: String!, $weight: String!, $distance: String!) {
+  calculateOffset(
+    options: { shop: $shop, weight: $weight, distance: $distance }
+  ) {
+    value
+    variantId
+    offsetWeight
+  }
+}

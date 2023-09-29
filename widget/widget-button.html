@@ -1,0 +1,299 @@
+<div
+  class="carbon-neutrality cn-inactive"
+  draggable="true"
+  id="nested-carbon-neutral-container"
+  style="
+    padding: 10px 10px;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+    margin: 40px 0px;
+    border: 1px solid rgba(23, 79, 55);
+    display: none;
+  "
+  data-drag="true"
+></div>
+
+<script>
+      var cart = {{cart | json}}
+      var weight = cart.total_weight * 0.00220462;
+      var API_URL = 'https://neutrl-api-stage-gkj7gtoloq-uc.a.run.app/api/v1/graphql'
+      var merchantPaysHTML = `<div
+      style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;"
+    >
+      <div>
+        <!-- Description -->
+        <p
+          style="
+            text-align: left;
+            font-size: 16px;
+            line-height: 1.2;
+            margin-bottom: 1px;
+            font-weight: 550;
+            color: rgba(23, 79, 55);
+          "
+        >
+          By placing this order, we will make a donation so that your order is 100% carbon neutral.
+        </p>
+
+        <div style="display: flex">
+          <!-- Powered by Carbon Neutral text -->
+          <p
+            style="
+              font-size: 11px;
+              font-weight: 500;
+              color: rgba(23, 79, 55);
+              margin: 0;
+              margin-left: 0;
+            "
+          >
+            Learn about carbon neutrality
+          </p>
+
+          <!-- 'Tree' tooltip -->
+          <div class="tooltip">
+            <img
+              style="margin-left: 3px; height: 17px"
+              src="https://img.icons8.com/emoji/344/deciduous-tree-emoji.png"
+              alt=""
+            />
+            <span
+              style="
+                line-height: normal;
+                font-size: 12px;
+                text-transform: none;
+                font-weight: normal;
+                display: none;
+              "
+              class="tooltiptext"
+              >Make your order carbon neutral by helping save the
+              <a
+                style="color: rgba(23, 79, 55)"
+                href="{{shop.permanent_domain}}"
+                target="_blank"
+                ><u>Whatever Forest</u></a
+              >.</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>`
+    var customerPaysHTML = `
+  <div
+    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;"
+  >
+    <div>
+      <!-- Description -->
+      <p
+        style="
+          text-align: left;
+          font-size: 16px;
+          line-height: 1.2;
+          margin-bottom: 1px;
+          font-weight: 550;
+          color: rgba(23, 79, 55);
+        "
+      >
+        Make this order carbon neutral
+      </p>
+
+      <div style="display: flex">
+        <!-- Powered by Carbon Neutral text -->
+        <p
+          style="
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(23, 79, 55);
+            margin: 0;
+            margin-left: 0;
+          "
+        >
+          Learn about carbon neutrality
+        </p>
+
+        <!-- 'Tree' tooltip -->
+        <div class="tooltip">
+          <img
+            style="margin-left: 3px; height: 17px"
+            src="https://img.icons8.com/emoji/344/deciduous-tree-emoji.png"
+            alt=""
+          />
+          <span
+            style="
+              line-height: normal;
+              font-size: 12px;
+              text-transform: none;
+              font-weight: normal;
+              display: none;
+            "
+            class="tooltiptext"
+            >Make your order carbon neutral by helping save the
+            <a
+              style="color: rgba(23, 79, 55)"
+              href="{{shop.permanent_domain}}"
+              target="_blank"
+              ><u>Whatever Forest</u></a
+            >.</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 100%;
+      "
+    >
+      <!-- Price display btn -->
+      <button
+        data-cbn-atc
+        disabled
+        style="
+          font-weight: 900;
+          color: rgba(71, 229, 154);
+          background: rgba(23, 79, 55);
+          border: none;
+          padding: 12px;
+          border-radius: 5px;
+        "
+      >
+        Loading...
+      </button>
+    </div>
+  </div>`
+    var query = `query CalculateOffsetQuery($shop: String!,$weight: String!, $distance: String!) {
+      calculateOffset(options: {shop: $shop, weight: $weight, distance: $distance}) {
+        value
+        variantId
+        offsetWeight
+      }
+    }`
+      var shopQuery = `query Shop($shop: String!) {
+    getShop(options: { shop: $shop }) {
+      shop {
+        id
+        shop
+        merchantPaysOffset
+        calculateOffset
+        flatRateOffsetAmount
+        appEnabledOnStorefront
+      }
+    }
+  }
+  `
+
+      function calculateOffset() {
+        fetch("https://neutrl-api-stage-gkj7gtoloq-uc.a.run.app/api/v1/graphql", {
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json",
+        },
+          "body": JSON.stringify({
+            query,
+            variables: {
+              shop: "{{shop.permanent_domain}}",
+              weight: weight.toString(),
+              distance: "1250"
+            }
+          })
+        })
+        .then(response => response.json()).then(data => {
+          console.log(data)
+          var atcBtn = document.querySelector('[data-cbn-atc]')
+          atcBtn.removeAttribute('disabled')
+          atcBtn.setAttribute('data-cbn-variant-id', data.data.calculateOffset.variantId)
+          atcBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log(e)
+            var data = {
+              items: [
+                {
+                  quantity: 1,
+                  id: e.target.getAttribute('data-cbn-variant-id'),
+                }
+              ]
+            }
+            fetch('/cart/add.js', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(data),
+            }).then(() => window.location.reload())
+          })
+          atcBtn.innerText = `Add ${data.data.calculateOffset.value} To Cart`
+        })
+        .catch(err => {
+          console.error(err);
+        });
+      }
+
+      fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        "body": JSON.stringify({
+          query: shopQuery,
+          variables: {
+            shop: '{{shop.permanent_domain}}'
+          }
+        })
+      }).then(response => response.json()).then(shopData => {
+        const shop = shopData.data.getShop.shop
+        console.log('shop', shop);
+        if(shop.appEnabledOnStorefront) {
+          document.getElementById('nested-carbon-neutral-container').style.display = "block"
+        }
+        if(shop.merchantPaysOffset) {
+          document.getElementById('nested-carbon-neutral-container').innerHTML = merchantPaysHTML
+        } else {
+          document.getElementById('nested-carbon-neutral-container').innerHTML = customerPaysHTML;
+
+          var hasOffsetItem = false;
+      var carbonNeutralItem = null;
+      {% for item in cart.items %}
+      {% if item.title contains "Carbon Neutral" %}
+      hasOffsetItem = true;
+      carbonNeutralItem = {{item.variant_id}}
+      {% endif %}
+      {% endfor %}
+      if(!hasOffsetItem) {
+
+        calculateOffset()
+        document.addEventListener('cn-cart-modified', function(e) {
+          console.log('cart modified', e)
+        })
+
+      } else {
+      	var atcBtn = document.querySelector('[data-cbn-atc]')
+        atcBtn.removeAttribute('disabled')
+        atcBtn.innerText = "Your order is carbon neutral! (Click to undo)"
+        atcBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log(e)
+          var data = {
+            updates: {
+              [carbonNeutralItem]: 0
+            }
+          }
+          fetch('/cart/update.js', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          body: JSON.stringify(data),
+          }).then(() => window.location.reload())
+        })
+      }
+        }
+      })
+</script>

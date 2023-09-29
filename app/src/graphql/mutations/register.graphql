@@ -1,0 +1,24 @@
+mutation register(
+  $shop: String!
+  $shopKey: String!
+  $scope: String!
+  $billingId: String!
+) {
+  register(
+    options: {
+      shop: $shop
+      shopKey: $shopKey
+      scope: $scope
+      billingId: $billingId
+    }
+  ) {
+    shop {
+      id
+      shop
+      scope
+      shopKey
+      createdAt
+      updatedAt
+    }
+  }
+}

@@ -1,0 +1,47 @@
+mutation UpdateShop(
+    $companyName: String
+    $managerName: String
+    $companySize: String
+    $productCategory: String
+    $averageProductWeight: String
+    $merchantPaysOffset: Boolean
+    $calculateOffset: Boolean
+    $flatRateOffsetAmount: String
+    $completedOnboarding: Boolean
+    $billingId: String
+    $appEnabledOnStorefront: Boolean
+    $billingActive: Boolean
+    $completedInstallation: Boolean
+    $previewMode: Boolean
+) {
+    updateShop(
+        options: {
+            companyName: $companyName
+            managerName: $managerName
+            companySize: $companySize
+            productCategory: $productCategory
+            averageProductWeight: $averageProductWeight
+            merchantPaysOffset: $merchantPaysOffset
+            calculateOffset: $calculateOffset
+            flatRateOffsetAmount: $flatRateOffsetAmount
+            completedOnboarding: $completedOnboarding
+            billingId: $billingId
+            appEnabledOnStorefront: $appEnabledOnStorefront
+            billingActive: $billingActive
+            completedInstallation: $completedInstallation
+            previewMode: $previewMode
+        }
+    ) {
+        shop {
+            shop
+            createdAt
+            updatedAt
+            companyName
+            billingActive
+            appEnabledOnStorefront
+            completedInstallation
+            completedOnboarding
+            previewMode
+        }
+    }
+}

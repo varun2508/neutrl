@@ -1,0 +1,3 @@
+query BillingRedirect($shop: String!) {
+  createBillingRedirect(options: { shop: $shop })
+}

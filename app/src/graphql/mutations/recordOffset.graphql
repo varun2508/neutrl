@@ -1,0 +1,11 @@
+# Write your query or mutation here
+mutation RecordOrderOffset(
+  $shop: String!
+  $value: Float!
+  $weight: Float!
+  $orderId: String!
+) {
+  recordOffset(
+    options: { shop: $shop, value: $value, weight: $weight, orderId: $orderId }
+  )
+}

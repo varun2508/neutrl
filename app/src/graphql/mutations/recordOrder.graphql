@@ -1,0 +1,3 @@
+mutation RecordOrder($shop: String!, $orderInfo: String!) {
+  recordOrder(options: { shop: $shop, orderInfo: $orderInfo })
+}

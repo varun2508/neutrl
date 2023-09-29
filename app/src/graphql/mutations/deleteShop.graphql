@@ -1,0 +1,3 @@
+mutation DeleteShop($shop: String!) {
+  deleteShop(options: { shop: $shop })
+}

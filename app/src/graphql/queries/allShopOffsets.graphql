@@ -1,0 +1,11 @@
+query GetAllShopOffsets {
+  allShopOffsets {
+    lastWeekWeight
+    lastMonthWeight
+    lastYearWeight
+    monthlyWeight {
+      month
+      weight
+    }
+  }
+}
